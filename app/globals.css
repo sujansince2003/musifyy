@@ -118,3 +118,88 @@
     @apply bg-background text-foreground;
   }
 }
+
+root {
+  --primary: #4f46e5;
+  --primary-light: #818cf8;
+  --primary-dark: #3730a3;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom animation for music visual elements */
+@keyframes equalizer {
+  0%,
+  100% {
+    height: 8px;
+  }
+  50% {
+    height: 16px;
+  }
+}
+
+.animate-equalizer {
+  animation: equalizer 0.8s ease-in-out infinite;
+}
+
+/* Subtle link hover animations */
+a {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+a.underline-animation {
+  text-decoration: none;
+}
+
+a.underline-animation::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -2px;
+  left: 0;
+  background-color: var(--primary);
+  transition: width 0.3s ease;
+}
+
+a.underline-animation:hover::after {
+  width: 100%;
+}
+
+/* Smooth transition for buttons */
+button {
+  transition: all 0.3s ease;
+}
+
+/* For smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c7c7c7;
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a3a3a3;
+}
