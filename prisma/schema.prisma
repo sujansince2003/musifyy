@@ -61,15 +61,17 @@ model VerificationToken {
 }
 
 model Stream {
-  id          String     @id @default(uuid())
-  type        StreamType
-  active      Boolean    @default(true)
-  url         String
-  extractedId String
-  streamName  String
-  user        User       @relation(fields: [userId], references: [id])
-  userId      String
-  upvotes     upvote[]
+  id             String     @id @default(uuid())
+  type           StreamType
+  active         Boolean    @default(true)
+  url            String
+  extractedId    String
+  streamName     String
+  smallThumbnail String
+  largeThumbnail String
+  user           User       @relation(fields: [userId], references: [id])
+  userId         String
+  upvotes        upvote[]
 }
 
 model upvote {
