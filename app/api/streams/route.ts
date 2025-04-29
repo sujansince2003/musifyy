@@ -67,6 +67,21 @@ export async function POST(req: NextRequest) {
 }
 
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+
+    const userId = req.nextUrl.searchParams.get("userId");
+
+    try {
+
+        const streams = await prisma.stream.findMany({
+
+            where: {
+                userId: userId ?? ""
+            }
+        })
+        return NextResponse.json({ msg: "Fetched all streams", streams }, { status: 200 })
+    } catch (error) {
+        return NextResponse.json({ msg: "failed to get streams", error })
+    }
 
 }
