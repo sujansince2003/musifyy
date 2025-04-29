@@ -1,16 +1,7 @@
 import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod"
-
-
-const YT_URL_REGEX = new RegExp("^https:\/\/www\.youtube\.com\/watch\?v=[\w-]+$")
-
-
-
-
-
-
-
+const YT_URL_REGEX = /^(?:(?:https?:)?\/\/)?(?:www\.)?(?:m\.)?(?:youtu(?:be)?\.com\/(?:v\/|embed\/|watch(?:\/|\?v=))|youtu\.be\/)((?:\w|-){11})(?:\S+)?$/;
 
 const StreamSchema = z.object({
     userId: z.string(),
@@ -30,7 +21,7 @@ export async function POST(req: NextRequest) {
         }
         const data = validData.data;
 
-        const validYTurl = YT_URL_REGEX.test(data.url);
+        const validYTurl = data.url.match(YT_URL_REGEX)
 
         if (!validYTurl) {
             return NextResponse.json({ msg: "Invalid Youtube URl" }, { status: 401 })
