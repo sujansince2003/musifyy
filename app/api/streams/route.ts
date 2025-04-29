@@ -1,7 +1,13 @@
 import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod"
+//@ts-expect-error no-types
+import youtubesearchapi from "youtube-search-api"
+
+// definining regex for the youtube url
 const YT_URL_REGEX = /^(?:(?:https?:)?\/\/)?(?:www\.)?(?:m\.)?(?:youtu(?:be)?\.com\/(?:v\/|embed\/|watch(?:\/|\?v=))|youtu\.be\/)((?:\w|-){11})(?:\S+)?$/;
+
+
 
 const StreamSchema = z.object({
     userId: z.string(),
@@ -30,6 +36,16 @@ export async function POST(req: NextRequest) {
 
 
         const extractedId = data.url.split("?v=")[1];
+        const ytdata = await youtubesearchapi.GetVideoDetails(extractedId)
+
+
+
+        const thumbnails = ytdata.thumbnail.thumbnails;
+        //sorting videos accoring to the sizes
+        thumbnails.sort((a: { width: string }, b: { width: string }) =>
+            a.width < b.width ? -1 : 1)
+
+
 
 
         const createStream = await prisma.stream.create({
@@ -38,7 +54,10 @@ export async function POST(req: NextRequest) {
                 url: data.url,
                 extractedId,
                 type: "YouTube",
-                streamName: "stream1"
+                streamName: ytdata.title ?? "video title not available",
+
+                largeThumbnail: thumbnails[thumbnails.length - 1].url ?? "",
+                smallThumbnail: (thumbnails.length > 1 ? thumbnails[thumbnails.length - 2].url : thumbnails[thumbnails.length - 1].url) ?? ""
 
             }
         })
@@ -62,6 +81,8 @@ export async function GET(req: NextRequest) {
 
     const userId = req.nextUrl.searchParams.get("userId");
 
+
+
     try {
 
         const streams = await prisma.stream.findMany({
@@ -76,3 +97,6 @@ export async function GET(req: NextRequest) {
     }
 
 }
+
+
+
