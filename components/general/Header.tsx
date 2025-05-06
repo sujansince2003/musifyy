@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/sheet";
 import Image from "next/image";
 import { signIn, signOut, useSession } from "next-auth/react";
+import { usePathname, useRouter } from "next/navigation";
 
 interface MenuItem {
   title: string;
@@ -140,6 +141,9 @@ const Header = ({
 }: Navbar1Props) => {
   const { data } = useSession();
 
+  const router = useRouter();
+  const pathname = usePathname();
+
   return (
     <section className="py-4 flex justify-center items-center">
       <div className="container">
@@ -162,14 +166,29 @@ const Header = ({
           </div>
           <div className="flex gap-2">
             {data?.user ? (
-              <Button
-                onClick={() => signOut()}
-                asChild
-                variant="outline"
-                size="sm"
-              >
-                <p>Logout</p>
-              </Button>
+              <>
+                {pathname.split("/")[1] === "stream" ? null : (
+                  <Button
+                    onClick={() => {
+                      router.push("/stream");
+                    }}
+                    asChild
+                    variant="outline"
+                    size="sm"
+                  >
+                    <p>Go to Streams</p>
+                  </Button>
+                )}
+
+                <Button
+                  onClick={() => signOut()}
+                  asChild
+                  variant="outline"
+                  size="sm"
+                >
+                  <p>Logout</p>
+                </Button>
+              </>
             ) : (
               <>
                 {" "}
