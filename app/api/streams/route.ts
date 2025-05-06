@@ -34,9 +34,29 @@ export async function POST(req: NextRequest) {
         }
 
 
+        function extractVideoId(url: string): string {
+            const urlObject = new URL(url);
+            const id = urlObject.searchParams.get("v")
+            return id as string
 
-        const extractedId = data.url.split("?v=")[1];
+
+        }
+
+
+
+
+
+
+        // const extractedId = data.url.split("?v=")[1];
+        const extractedId = extractVideoId(data.url)
+
+
+
+
+
+
         const ytdata = await youtubesearchapi.GetVideoDetails(extractedId)
+
 
 
 
@@ -53,6 +73,7 @@ export async function POST(req: NextRequest) {
                 userId: data.userId,
                 url: data.url,
                 extractedId,
+                artist: ytdata.channel,
                 type: "YouTube",
                 streamName: ytdata.title ?? "video title not available",
 
